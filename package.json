@@ -1,0 +1,22 @@
+{
+  "name": "tgbot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  },
+  "devDependencies": {
+    "node": "^25.3.0",
+    "nodemon": "^3.1.11",
+    "telegraf": "^4.16.3",
+    "typescript": "^5.9.3"
+  },
+  "description": ""
+}
