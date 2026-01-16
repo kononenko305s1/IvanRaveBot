@@ -26,6 +26,7 @@ bot.hears(
     'А ты гей?',
     'А ты гей',
     'а ты гей',
+    'геи?',
   ],
   (ctx) => {
     ctx.reply('Сама гей ' + ctx.message.from.first_name)
