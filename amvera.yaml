@@ -1,0 +1,27 @@
+# amvera.yaml
+specVersion: 0.0.4
+name: my-telegram-bot
+serviceAccount:
+  id: aje...
+
+containers:
+  - name: telegram-bot
+    image:
+      # Используйте свое имя образа
+      name: cr.yandex/your-registry-id/telegram-bot:latest
+    command: ['node', 'index.js']
+    tty: false
+    stdin: false
+    probes:
+      liveness:
+        http:
+          path: /health
+          port: 3000
+        initialDelaySeconds: 10
+        periodSeconds: 10
+    resources:
+      memory: '128MB'
+      cpu: '100m'
+    scalingPolicy:
+      minInstances: 0
+      maxInstances: 1
