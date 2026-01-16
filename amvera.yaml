@@ -1,27 +1,53 @@
-# amvera.yaml
+# amvera.yaml - полная конфигурация
+meta:
+  name: telegram-bot-production  # Имя приложения в Amvera
+  description: "Telegram Bot on Node.js with Telegraf"
+  tag: 1.0.0
+  labels:
+    environment: production
+    team: backend
+
 specVersion: 0.0.4
-name: my-telegram-bot
+
 serviceAccount:
-  id: aje...
+  id: aje6o8t1p5h3r9s2          # Замените на ваш Service Account ID
 
 containers:
-  - name: telegram-bot
+  - name: bot-container
     image:
-      # Используйте свое имя образа
-      name: cr.yandex/your-registry-id/telegram-bot:latest
+      name: cr.yandex/crpp2p3p4l5j/telegram-bot:latest  # Ваш образ в Container Registry
     command: ['node', 'index.js']
     tty: false
     stdin: false
+    
+    # Проверки здоровья
     probes:
       liveness:
         http:
           path: /health
           port: 3000
-        initialDelaySeconds: 10
+        initialDelaySeconds: 30
         periodSeconds: 10
+    
+    # Ресурсы
     resources:
-      memory: '128MB'
-      cpu: '100m'
+      memory: '256MB'
+      cpu: '200m'
+    
+    # Масштабирование
     scalingPolicy:
-      minInstances: 0
-      maxInstances: 1
+      minInstances: 1
+      maxInstances: 3
+    
+    # Переменные окружения
+    env:
+      - name: BOT_TOKEN
+        value: ваш_токен_бота
+      - name: NODE_ENV
+        value: production
+    
+    # Порт
+    ports:
+      - containerPort: 3000
+        protocol: TCP
+        name: http
