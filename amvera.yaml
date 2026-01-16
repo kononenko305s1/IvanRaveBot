@@ -1,53 +1,71 @@
 meta:
-  name: my-telegram-bot
-  description: Telegram Bot
-  tag: v1.0.0
+  name: telegram-bot
+  description: "Telegram Bot на Node.js"
+  tag: "1.0.0"
   toolchain:
-    name: nodejs           # ← ДОБАВЬТЕ ЭТО!
-    version: "18"          # версия Node.js
+    name: nodejs
+    version: "18"
+  environment: production
+  labels:
+    app: telegram-bot
+    team: backend
 
-specVersion: 0.0.4
-
-serviceAccount:
-  id: ваш-сервисный-аккаунт
+specVersion: "0.0.4"
 
 containers:
-  - name: telegram-bot
+  - name: telegram-bot-container
     image:
-      name: cr.yandex/ваш-регистри/telegram-bot:latest
-    command: ['node', 'index.js']
-    resources:
-      memory: '128MB'
-      cpu: '100m'
+      name: cr.yandex/ВАШ_REGISTRY_ID/telegram-bot:latest
+    command: ["node", "index.js"]
+    tty: false
+    stdin: false
     
-    # Проверки здоровья
+    resources:
+      memory: "256MB"
+      cpu: "200m"
+    
+    scalingPolicy:
+      minInstances: 1
+      maxInstances: 3
+    
+    env:
+      - name: BOT_TOKEN
+        value: "ВАШ_ТОКЕН_ОТ_BOTFATHER"
+      - name: NODE_ENV
+        value: "production"
+      - name: PORT
+        value: "3000"
+    
+    ports:
+      - containerPort: 3000
+        protocol: TCP
+    
     probes:
       liveness:
         http:
           path: /health
           port: 3000
         initialDelaySeconds: 30
-        periodSeconds: 10
+        periodSeconds: 60
+        timeoutSeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
     
-    # Ресурсы
-    resources:
-      memory: '256MB'
-      cpu: '200m'
-    
-    # Масштабирование
-    scalingPolicy:
-      minInstances: 1
-      maxInstances: 3
-    
-    # Переменные окружения
-    env:
-      - name: BOT_TOKEN
-        value: ваш_токен_бота
-      - name: NODE_ENV
-        value: production
-    
-    # Порт
-    ports:
-      - containerPort: 3000
-        protocol: TCP
-        name: http
+    volumes:
+      - name: logs
+        mountPath: /app/logs
+        type: tmpfs
+
+serviceAccount:
+  id: "ВАШ_SERVICE_ACCOUNT_ID"
+
+# Если нужно несколько контейнеров
+# containers:
+#   - name: bot
+#     # ... настройки бота
+#   - name: redis
+#     image:
+#       name: redis:alpine
+#     resources:
+#       memory: "128MB"
+#       cpu: "100m"
