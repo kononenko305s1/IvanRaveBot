@@ -1,24 +1,24 @@
-# amvera.yaml - полная конфигурация
 meta:
-  name: telegram-bot-production  # Имя приложения в Amvera
-  description: "Telegram Bot on Node.js with Telegraf"
-  tag: 1.0.0
-  labels:
-    environment: production
-    team: backend
+  name: my-telegram-bot
+  description: Telegram Bot
+  tag: v1.0.0
+  toolchain:
+    name: nodejs           # ← ДОБАВЬТЕ ЭТО!
+    version: "18"          # версия Node.js
 
 specVersion: 0.0.4
 
 serviceAccount:
-  id: aje6o8t1p5h3r9s2          # Замените на ваш Service Account ID
+  id: ваш-сервисный-аккаунт
 
 containers:
-  - name: bot-container
+  - name: telegram-bot
     image:
-      name: cr.yandex/crpp2p3p4l5j/telegram-bot:latest  # Ваш образ в Container Registry
+      name: cr.yandex/ваш-регистри/telegram-bot:latest
     command: ['node', 'index.js']
-    tty: false
-    stdin: false
+    resources:
+      memory: '128MB'
+      cpu: '100m'
     
     # Проверки здоровья
     probes:
